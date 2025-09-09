@@ -1,0 +1,30 @@
+{
+	"name": "LS_AZURESQL",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"USER_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "jvin.database.windows.net",
+			"database": "azuresqlserver",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "@{linkedService().USER_NAME}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_KEYVAULT",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "AzureSql",
+				"secretVersion": "6203c3adc5784093a9775280c01cb989"
+			}
+		}
+	}
+}

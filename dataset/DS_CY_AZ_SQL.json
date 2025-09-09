@@ -1,0 +1,40 @@
+{
+	"name": "DS_CY_AZ_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZURESQL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"USER_NAME": {
+					"value": "@dataset().USER_NAME",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"USER_NAME": {
+				"type": "string"
+			},
+			"TABLE_NAME": {
+				"type": "string"
+			},
+			"SCHEMA_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().SCHEMA_NAME",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().TABLE_NAME",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

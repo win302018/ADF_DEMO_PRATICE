@@ -1,0 +1,33 @@
+{
+	"name": "DS_ADLS_HARDCORDED",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZ_ADLS_HARDCORDED",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FILE_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FILE_NAME",
+					"type": "Expression"
+				},
+				"folderPath": "OUTPUT1",
+				"fileSystem": "sqladls"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

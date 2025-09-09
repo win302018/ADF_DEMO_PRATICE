@@ -1,0 +1,54 @@
+{
+	"name": "DS_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DATABASE_NAME": {
+					"value": "@dataset().DATABASE_NAME",
+					"type": "Expression"
+				},
+				"USER_NAME": {
+					"value": "@dataset().USER_NAME",
+					"type": "Expression"
+				},
+				"SERVER_NAME": {
+					"value": "@dataset().SCHEMA_NAME",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"SCHEMA_NAME": {
+				"type": "string"
+			},
+			"TABLE_NAME": {
+				"type": "string"
+			},
+			"DATABASE_NAME": {
+				"type": "string"
+			},
+			"SERVER_NAME": {
+				"type": "string"
+			},
+			"USER_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().SCHEMA_NAME",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().TABLE_NAME",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

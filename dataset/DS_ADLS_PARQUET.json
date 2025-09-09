@@ -1,0 +1,28 @@
+{
+	"name": "DS_ADLS_PARQUET",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FILE_NAME": {
+				"type": "string"
+			},
+			"FOLDER_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "sqladls"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
