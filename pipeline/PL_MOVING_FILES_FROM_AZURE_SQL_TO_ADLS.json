@@ -1,0 +1,150 @@
+{
+	"name": "PL_MOVING_FILES_FROM_AZURE_SQL_TO_ADLS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select TABLE_NAME.name T_NAME,SCHEMA_NAMES.name S_NAME\nfrom sys.tables  AS TABLE_NAME\njoin sys.schemas AS SCHEMA_NAMES  on TABLE_NAME.schema_id = SCHEMA_NAMES.schema_id\nwhere SCHEMA_NAMES.name = 'SalesLT'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_AZURE",
+						"type": "DatasetReference",
+						"parameters": {
+							"USER_NAME": {
+								"value": "@pipeline().parameters.USER_NAME",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_CY_AZ_SQL",
+									"type": "DatasetReference",
+									"parameters": {
+										"USER_NAME": {
+											"value": "@pipeline().parameters.USER_NAME",
+											"type": "Expression"
+										},
+										"TABLE_NAME": {
+											"value": "@item().T_NAME",
+											"type": "Expression"
+										},
+										"SCHEMA_NAME": {
+											"value": "@item().S_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS",
+									"type": "DatasetReference",
+									"parameters": {
+										"FOLDER_NAME": {
+											"value": "@{concat('SalesLT/',item().T_NAME)}",
+											"type": "Expression"
+										},
+										"FILE_NAME": {
+											"value": "@{concat(item().T_NAME,'.csv')}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"USER_NAME": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"file_name": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-29T02:27:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

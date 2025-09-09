@@ -1,0 +1,14 @@
+{
+	"name": "azurepraticelinked",
+	"properties": {
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "true"
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "daa1becc-9f50-49d7-a9fc-c76fbee64dc4",
+		"tenantId": "5d9794d3-5fc0-4f16-8440-b19fa043f185"
+	}
+}

@@ -1,0 +1,164 @@
+{
+	"name": "PL_FORLOOP_ACTIVITY",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "READING_ALL_TARGETED_FOLDERS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('FOLDER_NAMES')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_AZURESQL",
+									"type": "DatasetReference",
+									"parameters": {
+										"USER_NAME": {
+											"value": "@pipeline().parameters.USER_NAME",
+											"type": "Expression"
+										},
+										"TABLE_NAME": {
+											"value": "@pipeline().parameters.TABLE_NAME",
+											"type": "Expression"
+										},
+										"SCHEMA_NAME": {
+											"value": "@pipeline().parameters.SCHEMA_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS",
+									"type": "DatasetReference",
+									"parameters": {
+										"FOLDER_NAME": {
+											"value": "@string(item())",
+											"type": "Expression"
+										},
+										"FILE_NAME": {
+											"value": "@concat(pipeline().parameters.TABLE_NAME,'.csv')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Set variable1",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FOLDER_NAMES",
+								"value": [
+									"@string(item())"
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "READING_ALL_TARGETED_FOLDERS",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FOLDER_NAMES",
+					"value": {
+						"value": "@createArray('OUTPUT1','OUTPUT2','OUTPUT3')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"USER_NAME": {
+				"type": "string"
+			},
+			"TABLE_NAME": {
+				"type": "string"
+			},
+			"SCHEMA_NAME": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"FOLDER_NAMES": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-08-29T02:27:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

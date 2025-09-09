@@ -1,0 +1,27 @@
+{
+	"name": "schedule",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_MOVING_FILES_FROM_AZURE_SQL_TO_ADLS",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"USER_NAME": "vin"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2025-08-28T08:06:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

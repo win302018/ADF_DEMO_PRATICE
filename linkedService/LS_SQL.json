@@ -1,0 +1,35 @@
+{
+	"name": "LS_SQL",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"DATABASE_NAME": {
+				"type": "string"
+			},
+			"USER_NAME": {
+				"type": "string"
+			},
+			"SERVER_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "@{linkedService().SERVER_NAME}",
+			"database": "@{linkedService().DATABASE_NAME}",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "@{linkedService().USER_NAME}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_KEYVAULT",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLPASSWORD"
+			}
+		}
+	}
+}

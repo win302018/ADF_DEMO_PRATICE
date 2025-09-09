@@ -1,0 +1,34 @@
+{
+	"name": "DS_AZURESQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AZURESQL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"USER_NAME": {
+					"value": "@dataset().USER_NAME",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"USER_NAME": {
+				"type": "string"
+			},
+			"TABLE_NAME": {
+				"type": "string"
+			},
+			"SCHEMA_NAME": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "Address"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
