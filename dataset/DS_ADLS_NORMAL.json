@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "ProductModel.csv",
-				"folderPath": "SalesLT/ProductModel",
+				"folderPath": "SalesLT/Customer",
 				"fileSystem": "sqladls"
 			},
 			"columnDelimiter": ",",
